@@ -41,7 +41,7 @@ class NoteList extends Component {
     ));
     return (
       <div>
-        <NoteForm handleSubmit={this.props.handleSubmit} />
+        <NoteForm />
         <h3>Zadania do zrobienia:</h3>
         <ul>{activeNote}</ul>
         <hr />
@@ -59,14 +59,6 @@ const mapDispatchToProps = dispatch => {
     },
     changeActive: (id, date) => {
       dispatch({ type: "CHANGE_ACTIVE", id: id, date: date });
-    },
-    handleSubmit: (text, date, priority) => {
-      dispatch({
-        type: "HANDLE_SUBMIT",
-        text: text,
-        date: date,
-        priority: priority
-      });
     }
   };
 };

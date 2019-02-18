@@ -1,6 +1,7 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 
-export default class NoteForm extends Component {
+class NoteForm extends Component {
   minDate = new Date().toISOString().slice(0, 10);
   maxDate = new Date().toISOString().slice(0, 4) * 1 + 2 + "-12-31";
   state = {
@@ -19,22 +20,23 @@ export default class NoteForm extends Component {
       });
     }
   };
+
+  handleSubmit = e => {
+    e.preventDefault();
+    if (this.state.text.length > 2) {
+      this.props.addNote(this.state.text, this.state.date, this.state.priority);
+      this.setState({ text: "", priority: false, date: this.minDate });
+    }
+  };
+
   render() {
     return (
       <div>
-        <form
-          onSubmit={e => {
-            e.preventDefault();
-            this.props.handleSubmit(
-              this.state.text,
-              this.state.date,
-              this.state.priority
-            );
-          }}
-        >
+        <form onSubmit={this.handleSubmit}>
           <input
             type="text"
             placeholder="Dodaj zadanie"
+            value={this.state.text}
             onChange={this.handleState}
           />
           <input
@@ -60,3 +62,21 @@ export default class NoteForm extends Component {
     );
   }
 }
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addNote: (text, date, priority) => {
+      dispatch({
+        type: "HANDLE_SUBMIT",
+        text: text,
+        date: date,
+        priority: priority
+      });
+    }
+  };
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(NoteForm);
